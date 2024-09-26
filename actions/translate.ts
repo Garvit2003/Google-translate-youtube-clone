@@ -58,6 +58,22 @@ async function translate(prevState:State, formData:FormData){
   }
 
 //   push to mongodb
+if (rawFormData.inputLanguage === "auto") {
+    rawFormData.inputLanguage = data[0].detectedLanguage.language;
+  }
+  try {
+    const translation = {
+      to: rawFormData.outputLanguage,
+      from: rawFormData.inputLanguage,
+      fromText: rawFormData.input,
+      toText: data[0].translations[0].text,
+    };
+
+    addOrUpdateUser(userId, translation);
+} catch (err) {
+  console.error(err);
+}
+ 
 
 return {
     ...prevState,
