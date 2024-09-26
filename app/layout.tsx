@@ -1,6 +1,10 @@
+import Header from "@/components/Header";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+
+
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -24,12 +28,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    <ClerkProvider>
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Header/> 
+        <div className="max-x-6xl mx-auto">
         {children}
+        </div>
       </body>
     </html>
+  </ClerkProvider>
   );
 }
