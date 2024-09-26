@@ -19,18 +19,18 @@ async function TranslatePage() {
 
   const languageEndpoint="https://api.cognitive.microsofttranslator.com/languages?api-version=3.0"
 
-  const response = await fetch(languageEndpoint,
+  const response = await fetch(
     "https://api.cognitive.microsofttranslator.com/languages?api-version=3.0",
     {
-      next:{
-        revalidate:60*60*24,
-     },
+      next: {
+        revalidate: 60 * 60 * 24,
+      },
     }
   );
   const languages=await response.json() as TranslationLanguages;
 
   return (
-    <div>
+    <div className="px-10 xl:px-0 mb-20">
       {/*TranslationForm*/}
       <TranslationForm languages={languages}/>
 

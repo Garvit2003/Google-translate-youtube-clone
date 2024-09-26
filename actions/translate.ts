@@ -25,6 +25,9 @@ async function translate(prevState:State, formData:FormData){
     outputLanguage: formData.get("outputLanguage") as string,
   };
 
+  console.log(">>>",rawFormData);
+  console.log(endpoint);
+
   const response=await axios({
     baseURL:endpoint,
     url:'translate',
