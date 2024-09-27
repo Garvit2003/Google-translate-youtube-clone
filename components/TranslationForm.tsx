@@ -17,6 +17,7 @@ import { Volume2Icon } from "lucide-react";
 import Image from 'next/image';
 import { useEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
+import Recorder from "./Recorder";
 import SubmitButton from "./SubmitButton";
 import { Button } from "./ui/button";
 
@@ -62,10 +63,31 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
     
         synth.speak(wordsToSay);
       };
+
+      const uploadAudio = async (blob: Blob) => {
+        const mimeType = "audio/webm";
+    
+        const file = new File([blob], "audio.webm", { type: mimeType });
+    
+        const formData = new FormData();
+        formData.append("audio", file);
+    
+        const response = await fetch("/transcribeAudio", {
+          method: "POST",
+          body: formData,
+        });
+    
+        const data = await response.json();
+    
+        if (data.text) {
+          setInput(data.text);
+        }
+      };
     
 
   return (
     <div>
+        <form action={formAction}>
         <div className="flex space-x-2">
             <div className="flex items-center group cursor-pointer border rounded-md w-fit px-3 py-2 bg-[#E7F0FE] mb-5">
             <Image
@@ -82,8 +104,9 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
             </div>
 
             {/* <Recorder uploadAudio={uploadAudio} /> */}
+            <Recorder uploadAudio={uploadAudio} />
+
         </div>
-        <form action={formAction}>
             <div className="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2">
                 <div className="flex-1 space-y-2">
                     <Select name="inputLanguage" defaultValue="auto">
@@ -120,7 +143,7 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
                 </div>
                 <div className="flex-1 space-y-2">
                     <div className="flex items-center justify-between">
-                        
+
                     <Select name="outputLanguage" defaultValue="es">
                 <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
                     <SelectValue placeholder="Select a language" />
