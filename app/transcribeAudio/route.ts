@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   const arrayBuffer = await file.arrayBuffer();
   const audio = new Uint8Array(arrayBuffer);
 
-  console.log("== Transcribe Audio Sample ==");
+  // console.log("== Transcribe Audio Sample ==");
 
 
   const client = new OpenAIClient(
