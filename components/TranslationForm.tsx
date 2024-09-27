@@ -13,13 +13,12 @@ import {
 } from "@/components/ui/select";
 
 import { Textarea } from "@/components/ui/textarea";
+import { Volume2Icon } from "lucide-react";
 import Image from 'next/image';
 import { useEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
 import SubmitButton from "./SubmitButton";
-
-
-
+import { Button } from "./ui/button";
 
 const initialState = {
     inputLanguage: "auto",
@@ -53,6 +52,17 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
             setOutput(state.output);
         }
     }, [state]);
+
+    const playAudio = async () => {
+        const synth = window.speechSynthesis;
+    
+        if (!output || !synth) return;
+    
+        const wordsToSay = new SpeechSynthesisUtterance(output);
+    
+        synth.speak(wordsToSay);
+      };
+    
 
   return (
     <div>
@@ -109,7 +119,8 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
                 />
                 </div>
                 <div className="flex-1 space-y-2">
-
+                    <div className="flex items-center justify-between">
+                        
                     <Select name="outputLanguage" defaultValue="es">
                 <SelectTrigger className="w-[280px] border-none text-blue-500 font-bold">
                     <SelectValue placeholder="Select a language" />
@@ -132,6 +143,19 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
                             </SelectGroup>
                 </SelectContent>
                 </Select>
+
+                <Button
+                    variant="ghost"
+                    type="button"
+                    onClick={playAudio}
+                    disabled={!output}
+                >
+                    <Volume2Icon
+                    size={24}
+                    className="text-blue-599 cursor-pointer disabled:cursor-not-allowed"/>
+                </Button>                       
+                    </div>
+
                 <Textarea
                 placeholder="Type your message here."
                 className="min-h-32 text-xl"
