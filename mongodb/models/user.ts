@@ -71,3 +71,29 @@ export interface ITranslation extends Document {
   }
 }
 
+export async function getTranslations(
+    userId: string
+  ): Promise<Array<ITranslation>> {
+    await connectDB();
+  
+    try {
+      const user: IUser | null = await User.findOne({ userId: userId });
+      if (user) {
+        // sort translations by timestamp in descending order
+        user.translations.sort(
+          (a: ITranslation, b: ITranslation) =>
+            b.timestamp.getTime() - a.timestamp.getTime()
+        );
+  
+        return user.translations; // Return the translations
+      } else {
+        console.log(`User with userId ${userId} not found.`);
+        return [];
+      }
+    } catch (err) {
+      console.error("Error retrieving translations:", err);
+      throw err; // Rethrow the error if you want to handle it outside this function
+    }
+  }
+
+  export default User;

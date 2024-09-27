@@ -3,9 +3,10 @@
 
 import { State } from "@/components/TranslationForm";
 import connectDB from "@/mongodb/db";
-import { addOrUpdateUser } from "@/mongodb/models/user";
+import { addOrUpdateUser } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
+import { revalidateTag } from "next/cache";
 import { v4 } from "uuid";
 
 
@@ -75,8 +76,12 @@ if (rawFormData.inputLanguage === "auto") {
 
     addOrUpdateUser(userId, translation);
 } catch (err) {
-  console.error(err);
+  console.error("Error adding translation to user:",error);
 }
+
+revalidateTag("translationHistory");
+
+
  
 
 return {
