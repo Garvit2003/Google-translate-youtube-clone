@@ -2,6 +2,8 @@
 
 
 import { State } from "@/components/TranslationForm";
+import connectDB from "@/mongodb/db";
+import { addOrUpdateUser } from "@/mongodb/models/user";
 import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
 import { v4 } from "uuid";
@@ -58,6 +60,8 @@ async function translate(prevState:State, formData:FormData){
   }
 
 //   push to mongodb
+await connectDB();
+
 if (rawFormData.inputLanguage === "auto") {
     rawFormData.inputLanguage = data[0].detectedLanguage.language;
   }

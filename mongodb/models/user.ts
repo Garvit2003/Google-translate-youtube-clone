@@ -33,11 +33,11 @@ export interface ITranslation extends Document {
   export async function addOrUpdateUser(
     userId: string,
     translation: {
-        fromText: string;
-        from: string;
-        toText: string;
-        to: string;
-      }
+    fromText: string;
+    from: string;
+    toText: string;
+    to: string;
+  }
     
   ): Promise<IUser> {
     const filter = { userId: userId };
@@ -46,12 +46,12 @@ export interface ITranslation extends Document {
       $push: { translations: translation},
     };
 
+    await connectDB();
+
     // Upsert option ensures that the document is created if it doesn't exist
   // The new: true option in the options object ensures that the method returns the updated document after the operation is complete. If you don't set new: true, the method will return the original document before the update.
   // In summary, the code you have will either update an existing user's document with new translations or create a new user document with the given userId, and translations, and save it into the database.
   const options = { upsert: true, new: true, setDefaultsOnInsert: true };
-
-  await connectDB();
 
   try {
     const user: IUser | null = await User.findOneAndUpdate(
