@@ -62,28 +62,67 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
         const wordsToSay = new SpeechSynthesisUtterance(output);
     
         synth.speak(wordsToSay);
-      };
+    };
 
-      const uploadAudio = async (blob: Blob) => {
+    // const uploadAudio = async (blob: Blob) => {
+    //     const mimeType = "audio/webm";
+
+    //     const file = new File([blob], "audio.webm", { type: mimeType });
+
+    //     const formData = new FormData();
+    //     formData.append("audio", file);
+
+    //     const response = await fetch("/transcribeAudio", {
+    //         method: "POST",
+    //         body: formData,
+    //     });
+
+    //     const data = await response.json();
+
+    //     if (data.text) {
+    //         setInput(data.text);
+    //     }
+    // };
+    const uploadAudio = async (blob: Blob) => {
         const mimeType = "audio/webm";
-    
         const file = new File([blob], "audio.webm", { type: mimeType });
     
         const formData = new FormData();
         formData.append("audio", file);
     
-        const response = await fetch("/transcribeAudio", {
-          method: "POST",
-          body: formData,
-        });
+        try {
+            const response = await fetch("/transcribeAudio", {
+                method: "POST",
+                body: formData,
+            });
     
-        const data = await response.json();
+            // Check if the response is OK
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
     
-        if (data.text) {
-          setInput(data.text);
+            // Attempt to parse JSON response
+            const data = await response.json();
+    
+            // Check if the expected data is present
+            if (data.text) {
+                setInput(data.text);
+            } else {
+                console.error("Response does not contain 'text':", data);
+            }
+        } catch (error) {
+            // If JSON parsing fails, log the error and response text
+            if (error instanceof SyntaxError) {
+                const text = await response.text(); // Read the response body as text
+                console.error("Failed to parse JSON:", error);
+                console.error("Response body:", text);
+            } else {
+                console.error("Error uploading audio:", error);
+            }
         }
-      };
+    };
     
+
 
   return (
     <div>
