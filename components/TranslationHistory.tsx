@@ -1,5 +1,6 @@
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
+import DeleteTranslationButton from "./DeleteTranslationButton";
 import TimeAgoText from "./TimeAgoText";
 
 
@@ -63,6 +64,7 @@ async function TranslationHistory() {
                 date={new Date(translation.timestamp).toISOString()}
               />
             </p>
+            <DeleteTranslationButton id={translation._id} />
           </li>
         ))}
       </ul>

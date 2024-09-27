@@ -16,6 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import Image from 'next/image';
 import { useEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
+import SubmitButton from "./SubmitButton";
 
 
 
@@ -143,8 +144,9 @@ function TranslationForm({languages}:{languages:TranslationLanguages}) {
                 </div>
             </div>
 
-            <div>
-                <button type="submit" ref={submitBtnRef}>Submit</button>
+            <div className="mt-5 flex justify-end">
+                <SubmitButton disabled={!input}/>
+                <button type="submit" ref={submitBtnRef}hidden/>
             </div>
 
         </form>
