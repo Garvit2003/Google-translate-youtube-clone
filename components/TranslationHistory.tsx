@@ -1,5 +1,6 @@
 import { ITranslation } from "@/mongodb/models/User";
 import { auth } from "@clerk/nextjs/server";
+import TimeAgoText from "./TimeAgoText";
 
 
 const getLanguage = (code: string) => {
@@ -56,14 +57,12 @@ async function TranslationHistory() {
                 <p className="text-gray-400">{translation.toText}</p>
               </div>
             </div>
-
-            {/* <p className="text-sm text-gray-300 absolute top-2 right-2">
+            {/* TimeAgo */}
+            <p className="text-sm text-gray-300 absolute top-2 right-2">
               <TimeAgoText
                 date={new Date(translation.timestamp).toISOString()}
               />
             </p>
-
-            <DeleteTranslationButton id={translation._id} /> */}
           </li>
         ))}
       </ul>
